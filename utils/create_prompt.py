@@ -257,6 +257,40 @@ xml
     def get_function(self,function,paper):
         prompt = f'''你好，你是一个经验丰富的蛋白质靶点的配体生成专家。现在我会交给你{self.pref_name}蛋白质靶点的功能信息，请你研究这些信息：{function}。在研究完结构信息后，请你阅读目前与之相关的文献：{paper}。好了，在阅读完文献并体会过该靶点的功能信息后，请你尝试生成该靶点结合的配体的分子smiles表示。最终结果使用<smiles></smiles>包裹，以便后续提取。
         '''
+
+    def get_youhua(self,smiles,score,constrain):
+        prompt = '''Role: You are an expert computational medicinal chemist specializing in ligand optimization. Your task is to analyze existing ligand candidates and generate improved novel molecules by intelligently combining their strengths.
+Input Data Structure:
+molecules: [list of SMILES strings]
+overall_scores: [list of integers 0-100] ← Higher is better for drug-likeness
+constraint_metrics: {
+"metric_name": {
+"values": [list of numbers],
+"direction": "lower" or "higher" // e.g., "ring_count ≤5" → direction="lower"
+},
+...
+}
+Core Instructions:
+Analyze molecular strengths
+Identify top 3 ligands with the highest overall scores and extract their drug-like features (e.g., hydrogen bond donors, aromatic rings)
+For each constraint metric:
+Find ligands optimally satisfying direction (e.g., lowest values if direction="lower")
+Extract structural elements enabling constraint compliance
+Cross-reference to discover:
+Why high-scoring ligands failed constraints
+Why constraint-compliant ligands scored poorly overall
+Generate novel ligands
+Combine extracted features to create 3-5 new SMILES strings that:
+Integrate complementary strengths from multiple input ligands
+Explicitly optimize for both high overall scores AND constraint satisfaction
+For each new ligand:
+Explain which input ligand features were fused (e.g., "torsional flexibility from Ligand#3 + polar surface area from Ligand#1")
+Predict improvements:
+overall_score rationale (e.g., "Added sulfonyl group to enhance solubility")
+constraint rationale (e.g., "Reduced rotatable bonds to meet direction='lower' requirement")
+Output Requirements:
+### Optimized Ligand: <SMILES>The refined ligand molecule</SMILES>  
+        '''
     def get_no_rag(self):
         prompt = f'''请你生成{self.pref_name}靶点的配体分子smiles，使用<smiles></smiles>包裹，以便后续提取'''
         return prompt
