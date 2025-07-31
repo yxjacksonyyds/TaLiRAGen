@@ -1,13 +1,13 @@
 import json
-from get_knowledge import get_bind,get_activity
-from prompt import promptt
+from utils.get_knowledge import get_bind,get_activity
+from utils.create_prompt import promptt
 import requests
-from qwen import get_answer
+from utils.qwen import get_answer
 from transformers import pipeline
 from modelscope import AutoModelForCausalLM, AutoTokenizer
 from accelerate import init_empty_weights  # 新路径
 
-with open('dataset/filtered_TTD.txt','r') as data:
+with open('dataset/filtered_TTD.txt', 'r') as data:
     uniprot_list = []
     chembl_list = []
     for i in data:
