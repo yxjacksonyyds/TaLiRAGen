@@ -1,7 +1,7 @@
 from openai import OpenAI
 
 def chat(list):
-    client = OpenAI(api_key='sk-0e18797e027e42e0bed0ff10c317940b', base_url='https://api.deepseek.com')
+    client = OpenAI(api_key=YOUR_API_KEY, base_url='https://api.deepseek.com')
     dialogue_history = [
         {"role": "system", "content": "你是个乐于助人的分子生成专家。"}
     ]
